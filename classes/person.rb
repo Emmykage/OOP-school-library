@@ -38,7 +38,3 @@ class Person < Nameable
     true if @age >= 18
   end
 end
-
-# p1 = Person.new('morris', 27)
-# p1.can_use_service?
-# p p1
