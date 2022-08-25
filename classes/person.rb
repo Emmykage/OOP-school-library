@@ -4,8 +4,7 @@ require_relative 'capitalize_decorator'
 require_relative 'trimmer_decorator'
 
 class Person < Nameable
-  attr_reader :id
-  attr_reader :rentals
+  attr_reader :id, :rentals
   attr_accessor :name, :age
 
   def initialize(age, name = 'Unknown', parent_permission: true)
@@ -35,7 +34,6 @@ class Person < Nameable
     true if @age >= 18
   end
 end
-
 
 # p1 = Person.new('morris', 27)
 # p1.can_use_service?
