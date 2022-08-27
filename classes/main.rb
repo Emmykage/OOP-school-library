@@ -17,6 +17,7 @@ def display(app)
   key_select(option, app)
 end
 
+# rubocop:disable Metrics/CyclomaticComplexity
 def key_select(option, app)
   case option
   when 1
@@ -44,6 +45,7 @@ def key_select(option, app)
   end
   display(app) if option < 7
 end
+# rubocop:enable Metrics/CyclomaticComplexity
 
 def main(app)
   display(app)

@@ -41,7 +41,7 @@ class App
       create_teacher
     else
       puts 'Enter a valid input'
-      create_person(pick)
+      create_person
     end
   end
 
@@ -63,7 +63,7 @@ class App
 
   def permission?
     puts 'Do you have parents permission? [Y/N]'
-    permit = gets.chomp
+    permit = gets.chomp.downcase
     case permit
     when 'y'
       true
