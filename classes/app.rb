@@ -112,18 +112,22 @@ class App
     end
 
     book_selection = gets.chomp.to_i
-    puts "#{@books[book_selection]} has been selected"
+    if @books.include? @books[book_selection]
 
-    puts 'Select person'
-    @persons.each_with_index { |person, index| puts "[#{index}] ->#{person.name} ID: #{person.id}" }
-    person_selection = gets.chomp.to_i
-    puts "#{@persons[person_selection]} was selected"
+      puts "#{@books[book_selection]} has been selected"
 
-    puts 'Enter date for rental YYYY-MM-DD'
-    r_date = gets.chomp
+      puts 'Select person'
+      @persons.each_with_index { |person, index| puts "[#{index}] ->#{person.name} ID: #{person.id}" }
+      person_selection = gets.chomp.to_i
 
-    @rentals.push(Rental.new(r_date, @books[book_selection], @persons[person_selection]))
-    puts "#{persons[person_selection].name} with #{persons[person_selection].id}rentals has been created"
+      puts 'Enter date for rental YYYY-MM-DD'
+      r_date = gets.chomp
+
+      @rentals.push(Rental.new(r_date, @books[book_selection], @persons[person_selection]))
+      puts "#{persons[person_selection].name} with #{persons[person_selection].id}rentals has been created"
+    else
+      'Enter a valid input'
+    end
   end
 
   def list_rental
