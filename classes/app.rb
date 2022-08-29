@@ -9,7 +9,6 @@ class App
     @persons = []
     @rentals = []
   end
- 
 
   def list_people
     if @persons.empty?
@@ -27,7 +26,6 @@ class App
     end
   end
 
-  
   def create_student
     puts "Enter a student\'s name"
     name = gets.chomp
