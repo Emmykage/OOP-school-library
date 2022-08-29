@@ -38,7 +38,7 @@ git clone https://github.com/Emmykage/React-Capstone.git
 ### Run the project locally
 
 ```sh
-npm install
+Bundle install
 ```
 
 ```sh
