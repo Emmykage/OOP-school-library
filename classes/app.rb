@@ -9,7 +9,7 @@ class App
     @persons = []
     @rentals = []
   end
-  puts 'Select an option'
+ 
 
   def list_people
     if @persons.empty?
@@ -27,24 +27,7 @@ class App
     end
   end
 
-  def create_person
-    puts "Create a Teacher or a Student
-        [1] -> Student
-        [2] -> Teacher
-        "
-    pick = gets.chomp.to_i
-
-    case pick
-    when 1
-      create_student
-    when 2
-      create_teacher
-    else
-      puts 'Enter a valid input'
-      create_person
-    end
-  end
-
+  
   def create_student
     puts "Enter a student\'s name"
     s_name = gets.chomp
