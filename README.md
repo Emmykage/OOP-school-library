@@ -29,10 +29,6 @@ To get a local copy up and running follow these simple example steps.
 
 - if you have already insall github in your local pc run:
 
-```sh
-git clone https://github.com/Emmykage/React-Capstone.git
-```
-
 - Or download the zip file from the github directory.
 
 ### Run the project locally
@@ -58,6 +54,14 @@ npm start
 - GitHub: [@emmykage](https://github.com/Emmykage)
 - Twitter: [@mennydev](https://twitter.com/mennydev)
 - LinkedIn: [Menanya Morris](https://www.linkedin.com/in/morris-menanya)
+
+
+👤 **Addisu Haile**
+
+- GitHub: [@Addisu87](https://github.com/Addisu87)
+- Twitter: [@AddisuTedla](https://twitter.com/AddisuTedla)
+- LinkedIn: [Addisu Tedla](www.linkedin.com/in/addisu-tedla/)
+
 
 
 
