@@ -1,7 +1,7 @@
 require_relative 'app'
 
 def display(app)
-    puts "
+  puts "
       [1] -> List all books
       [2] -> List all people
       [3] -> Create a person
@@ -11,35 +11,34 @@ def display(app)
       [7] -> quit
       Enter Selection:
       "
-    option = gets.chomp.to_i
-    process = Operation.new()
-    process.key_select(option, app)
+  option = gets.chomp.to_i
+  process = Operation.new
+  process.key_select(option, app)
 end
 
-class Operation 
-
-    puts 'Select an option'
-# rubocop:disable Metrics/CyclomaticComplexity
-def key_select(option, app)
+class Operation
+  puts 'Select an option'
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def key_select(option, app)
     case option
     when 1
-     list_books(app)
-  
+      list_books(app)
+
     when 2
-     list_people
-  
+      list_people
+
     when 3
-    create_person(app)
-  
+      create_person(app)
+
     when 4
-      app.create_book
-  
+      create_book(app)
+
     when 5
-      app.create_rental
-  
+      create_rental(app)
+
     when 6
-      app.list_rental
-  
+      list_rental(app)
+
     when 7
       app.quit_app
     else
@@ -51,12 +50,10 @@ def key_select(option, app)
 
   def list_book(app)
     app.list_books
-
   end
 
   def list_people(app)
     app.list_people
-
   end
 
   def create_person(app)
@@ -67,14 +64,24 @@ def key_select(option, app)
     pick = gets.chomp.to_i
     case pick
     when 1
-        app.create_student
+      app.create_student
     when 2
-        app.create_teacher
+      app.create_teacher
     else
-        puts 'Enter a valid input'
-        create_person
+      puts 'Enter a valid input'
+      create_person
     end
   end
 
+  def creat_book(app)
+    app.creat_book
+  end
 
+  def creat_rental(app)
+    app.creat_rental
+  end
+
+  def list_rental(app)
+    app.list_rental
+  end
 end
