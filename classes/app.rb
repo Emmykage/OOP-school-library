@@ -30,14 +30,14 @@ class App
   
   def create_student
     puts "Enter a student\'s name"
-    s_name = gets.chomp
+    name = gets.chomp
 
     puts "Enter student\'s age"
-    s_age = gets.chomp.to_i
+    age = gets.chomp.to_i
 
     permission = permission?
 
-    @persons.push(Student.new(s_age, s_name, parent_permission: permission))
+    @persons.push(Student.new(age, name, parent_permission: permission))
 
     @books.each { |e| puts e.title }
 
@@ -60,15 +60,15 @@ class App
 
   def create_teacher
     puts "Enter teacher\'s name"
-    t_name = gets.chomp
+    name = gets.chomp
 
     puts "Enter teacher\'s age"
-    t_age = gets.chomp.to_i
+    age = gets.chomp.to_i
 
     puts 'Enter specialization'
-    t_special = gets.chomp
+    special = gets.chomp
 
-    @persons.push(Teacher.new(t_age, t_special, t_name))
+    @persons.push(Teacher.new(age, special, name))
 
     puts 'Teacher has been created'
   end
