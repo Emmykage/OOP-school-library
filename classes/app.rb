@@ -8,6 +8,33 @@ class App
     @books = []
     @persons = []
     @rentals = []
+    @person_file = PreserveFile.new('person.json')
+    @book_file = PreserveFile.new('book.json')
+    @rentals_file = PreserveFile.new('rent.json')
+  end
+
+  def load_people
+    if @person_file.read_json
+      @person_file.read_json.map do |person|
+        if person['classroom']
+          Student.new(person['age'], person['name'], person['permission'])
+        else
+          Teacher.new(person['age'], person['specialization'], person['name'])
+        end
+      end
+    else
+      []
+    end
+  end
+
+  def load_books
+    if @book_file.read_json
+      @book_file.read_json.map do |book|
+        Book.new(book['title'], book['author'])
+      end
+    else
+      []
+    end
   end
 
   def list_people
