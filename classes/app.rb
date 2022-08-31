@@ -12,63 +12,45 @@ class App
     @persons = []
     @rentals = []
     @store_file = PreserveFile.new
-    # @book_file = PreserveFile.new()
-    # @rentals_file = PreserveFile.new()
-    # load_people
+    load_people
+    load_books
+    load_rentals
   end
 
   def load_people
-    if @store_file.read_json('data/person')
-      @store_file.read_json.map do |person|
-        if person['type'] = 'student'
-          Student.new(person['age'], Classroom.new(person['classroom']), person['name'], person['permission'])
-        elseif person['type'] = 'teacher'
-          Teacher.new(person['age'], person['specialization'], person['name'])
+    stored_people = @store_file.read_json('data/person.json')
+    # classroom = 'default'
+    stored_people.map do |person|
+      case person['type']
+      when 'student'
+         @persons << Student.new(person['age'], person['classroom'], person['name'], person['id'], parent_permission: person['permission'])
+      when 'teacher'
+         @persons << Teacher.new(person['age'], person['specialization'], person['name'], person['id'])
+    
         end
       end
-    else
-      []
-    end
+    
   end
 
   def load_books
-    if @store_file.read_json
-      @store_file.read_json('data/book.json').map do |book|
-        Book.new(book['title'], book['author'])
+    
+      stored_books = @store_file.read_json('data/book.json')
+      stored_books.map do |book|
+        @books.push(Book.new(book['title'], book['author']))
+      end
+  end
+
+  def load_rentals
+        stored_rental = @store_file.read_json('data/book.json')
+        stored_rental.map do |rent|
+        Rental.new(rent['date'], @books[rent['book']], @person[rent['person']])
       end
     else
       []
     end
   end
 
-  # def load_rentals
-  #   if @rental_file.read_json
-  #     @rental_file.read_json.map do |rent|
-  #       Rental.new(rent['date'], @books[rent['book']], @person[rent['person']])
-  #     end
-  #   else
-  #     []
-  #   end
-  # end
-
-  # def save_file
-  #   person_collection = @persons.map do |person|
-  #     if person.instance_of?(Student)
-  #       { name: person.name, classroom: person.classroom.label, age: person.age,
-  #         permission: person.parent_permission }
-  #     else
-  #       { name: person.name, specialization: person.specialization, age: person.age }
-  #     end
-  #   end
-  #   book_collection = @books.map { |book| { title: book.title, author: book.author } }
-
-  #   rent_collection = @rentals.map do |rental|
-  #     { date: rental.date, book: @book.index(rental.book), person: @person.index(retal.person) }
-  #   end
-  #   @store_file.save_to_json(person_collection, options: {})
-  #   @book_file.save_to_json(book_collection, options: {})
-  #   @rental_file.save_to_json(rent_collection, options: {})
-  # end
+  
   def add_rent_data
     rental_collection = @rentals.map do | rental |
       {date: rental.date, name: rental.person.name, book_title: rental.book.title, book_author: rental.book.author}
