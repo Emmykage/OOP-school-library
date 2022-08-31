@@ -8,7 +8,6 @@ class PreserveFile
     'success'
   end
 
-  
   def read_json(file)
     return [] unless File.exist?(file)
 
