@@ -36,24 +36,26 @@ class App
     
       stored_books = @store_file.read_json('data/book.json')
       stored_books.map do |book|
-        @books.push(Book.new(book['title'], book['author']))
+               @books.push(Book.new(book['title'], book['author']))
       end
   end
 
   def load_rentals
-        stored_rental = @store_file.read_json('data/book.json')
-        stored_rental.map do |rent|
-        Rental.new(rent['date'], @books[rent['book']], @person[rent['person']])
+        stored_rental = @store_file.read_json('data/rent.json')
+        stored_rental.each do |rental|
+          # p rental['date']
+        
+      filtered_person = @persons.find {|person| rental['name'] == person.name}
+      filtered_book = @books.find {|book| rental['book_tile'] == book.title}
+       @rentals.push(Rental.new(rental['date'], filtered_book, filtered_person))
       end
-    else
-      []
-    end
+   
   end
 
   
   def add_rent_data
     rental_collection = @rentals.map do | rental |
-      {date: rental.date, name: rental.person.name, book_title: rental.book.title, book_author: rental.book.author}
+      {date: rental.date, person_id: rental.person.id, name: rental.person.name, book_title: rental.book.title}
     end
     @store_file.save_to_json(rental_collection, 'data/rent.json')
   end
@@ -71,7 +73,7 @@ class App
 
   def add_book_data
     book_collection = @books.map do |book|
-      { title: book.title, author: book.author }
+      { title: book.title, author: book.author, id: book.id }
     end
     @store_file.save_to_json(book_collection, 'data/book.json')
   end
