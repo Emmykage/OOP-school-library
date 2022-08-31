@@ -25,7 +25,7 @@ class Operation
       list_books(app)
 
     when 2
-      list_people
+      list_people(app)
 
     when 3
       create_person(app)
@@ -48,7 +48,7 @@ class Operation
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  def list_book(app)
+  def list_books(app)
     app.list_books
   end
 
@@ -73,12 +73,12 @@ class Operation
     end
   end
 
-  def creat_book(app)
-    app.creat_book
+  def create_book(app)
+    app.create_book
   end
 
-  def creat_rental(app)
-    app.creat_rental
+  def create_rental(app)
+    app.create_rental
   end
 
   def list_rental(app)

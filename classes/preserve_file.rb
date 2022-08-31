@@ -1,13 +1,10 @@
 require 'json'
 
 class PreserveFile
-  def initialize(file_store)
-    @file_store = file_store
-  end
-
-  def save_to_json(data, options: {})
-    file = File.new(file_store, 'w')
-    file.write(JSON.generate(data, options))
+ 
+  def save_to_json(data, file)
+    file = File.open(file, 'a')
+    file.write(JSON.generate(data))
     file.close
     'success'
   end
