@@ -201,6 +201,18 @@ class App
     end
   end
 
+  def add_people_data
+    people_collection = @persons.map do |person|
+      if person.instance_of?(Student)
+        { age: person.age, name: person.name, parent_permission: person.parent_permission }
+      else
+        { age: person.age, name: person.name, specialization: person.specialization }
+      end
+    end
+    people_data = File.open('data/person.json', 'w')
+    people_data.write(JSON.generate(people_collection))
+    people_data.close
+  end
 
   def quit_app
     puts 'Thanks for using our app'
