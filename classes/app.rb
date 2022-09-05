@@ -1,6 +1,9 @@
 require_relative 'student'
 require_relative 'teacher'
 require_relative 'rental'
+require_relative 'classroom'
+require_relative 'preserve_file'
+require 'json'
 class App
   attr_reader :books, :persons, :rentals
 
@@ -8,13 +11,72 @@ class App
     @books = []
     @persons = []
     @rentals = []
+    @store_file = PreserveFile.new
+    load_people
+    load_books
+    load_rentals
+  end
+
+  def load_people
+    stored_people = @store_file.read_json('data/person.json')
+    stored_people.map do |p|
+      case p['type']
+      when 'student'
+        @persons << Student.new(p['age'], p['classroom'], p['name'], p['id'], parent_permission: p['permission'])
+      when 'teacher'
+        @persons << Teacher.new(p['age'], p['specialization'], p['name'], p['id'])
+
+      end
+    end
+  end
+
+  def load_books
+    stored_books = @store_file.read_json('data/book.json')
+    stored_books.map do |book|
+      @books.push(Book.new(book['title'], book['author']))
+    end
+  end
+
+  def load_rentals
+    stored_rental = @store_file.read_json('data/rent.json')
+    stored_rental.each do |rental|
+      person = @persons.find { |p| p.id == rental['person_id'] }
+      book = @books.find { |b| b.title == rental['book_title'] }
+      @rentals.push(Rental.new(rental['date'], book, person))
+    end
+  end
+
+  def add_rent_data
+    rental_collection = @rentals.map do |r|
+      { date: r.date, person_id: r.person.id, name: r.person.name, book_title: r.book.title, book_id: r.book.id }
+    end
+    @store_file.save_to_json(rental_collection, 'data/rent.json')
+  end
+
+  def add_people_data
+    people_collection = @persons.map do |person|
+      if person.instance_of?(Student)
+        { type: 'student', id: person.id, age: person.age, name: person.name,
+          parent_permission: person.parent_permission }
+      else
+        { type: 'teacher', id: person.id, age: person.age, name: person.name, specialization: person.specialization }
+      end
+    end
+    @store_file.save_to_json(people_collection, 'data/person.json')
+  end
+
+  def add_book_data
+    book_collection = @books.map do |book|
+      { title: book.title, author: book.author, id: book.id }
+    end
+    @store_file.save_to_json(book_collection, 'data/book.json')
   end
 
   def list_people
     if @persons.empty?
       puts 'no person added '
     else
-      @persons.each { |person| puts("name: #{person.name}") }
+      @persons.each_with_index { |person, index| puts "[#{index}] ->#{person.name} ID: #{person.id}" }
     end
   end
 
@@ -22,7 +84,7 @@ class App
     if @books.empty?
       puts 'book list is empty'
     else
-      @books.each { |book| puts "Title: #{book.title} Author: #{book.author}" }
+      @books.each_with_index { |book, index| puts "[#{index}]-> Title: #{book.title} Author: #{book.author}" }
     end
   end
 
@@ -35,9 +97,11 @@ class App
 
     permission = permission?
 
-    @persons.push(Student.new(age, name, parent_permission: permission))
+    classroom = 'default'
 
-    @books.each { |e| puts e.title }
+    @persons.push(Student.new(age, classroom, name, parent_permission: permission))
+
+    add_people_data
 
     puts 'student created'
   end
@@ -67,6 +131,7 @@ class App
     special = gets.chomp
 
     @persons.push(Teacher.new(age, special, name))
+    add_people_data
 
     puts 'Teacher has been created'
   end
@@ -78,19 +143,12 @@ class App
     author = gets.chomp
     @books.push(Book.new(title, author))
     puts 'book has been created'
-
-    @books.each { |book| puts("name: #{book.title} #{book.author}") }
+    add_book_data
   end
 
   def create_rental
-    puts 'Select a book by index'
-    if @books.empty?
-      puts 'no books available'
-    else
-      @books.each_with_index { |book, index| puts "[#{index}]-> Title: #{book.title} Author: #{book.author}" }
-      puts 'select ID'
-
-    end
+    list_books
+    puts 'select ID'
 
     book_selection = gets.chomp.to_i
     if @books.include? @books[book_selection]
@@ -98,17 +156,17 @@ class App
       puts "#{@books[book_selection]} has been selected"
 
       puts 'Select person'
-      @persons.each_with_index { |person, index| puts "[#{index}] ->#{person.name} ID: #{person.id}" }
+      list_people
       person_selection = gets.chomp.to_i
 
       puts 'Enter date for rental YYYY-MM-DD'
       r_date = gets.chomp
-
       @rentals.push(Rental.new(r_date, @books[book_selection], @persons[person_selection]))
-      puts "#{persons[person_selection].name} with #{persons[person_selection].id}rentals has been created"
+      puts "#{persons[person_selection].name} with #{persons[person_selection].id} rentals has been created"
     else
       'Enter a valid input'
     end
+    add_rent_data
   end
 
   def list_rental
